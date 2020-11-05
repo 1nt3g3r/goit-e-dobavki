@@ -66,10 +66,11 @@ public class Parser {
             }
 
             if (page == null) {     //Если страницы под нашу добавку не существует,
+                System.out.println("No page");
                 continue;           //пропустить её анализ и перейти к следующей добавке.
             }
 
-            additive.setECod(getParameterByHtmlClassName("name"));
+            additive.setECod(getParameterByHtmlClassName("addicon__name"));
             additive.setName(getNameFromPageE());
             additive.setOtherNames(getNamesFromPageE());
             additive.setCategory(getCategoryFromPageE());
@@ -80,6 +81,9 @@ public class Parser {
             additive.setHarm(getTextByHtmlClassName("Вред"));
             additive.setUsingInfo(getTextByHtmlClassName("Использование"));
             additive.setLegislation(getTextByHtmlClassName("Законодательство"));
+
+            System.out.println("Additive");
+            System.out.println(additive);
 
             if (additive.getDanger() == AdditiveDanger.not_assigned && additive.getOrigin() == AdditiveOrigin.not_assigned && additive.getCategory() == AdditiveCategory.not_assigned) {
                 continue;
@@ -93,13 +97,13 @@ public class Parser {
     }
 
     private String getNameFromPageE() {
-        String nameRaw = page.getElementById("page-title").text();
+        String nameRaw = page.selectFirst(".page-title").text();
         return nameRaw.substring(7);
     }
 
     private String getNamesFromPageE() {
         StringJoiner result = new StringJoiner("#");
-        Elements jsoupElements = page.getElementsByClass("spoiler-body");
+        Elements jsoupElements = page.getElementsByClass("spoiler__body");
         if (jsoupElements.isEmpty()) {
             return null;
         }
@@ -115,7 +119,7 @@ public class Parser {
     }
 
     private AdditiveCategory getCategoryFromPageE() {
-        String result = getParameterByHtmlClassName("field categories");
+        String result = page.selectFirst("div.addprop--category").text();
         if (result == null) {
             return AdditiveCategory.not_assigned;
         }
@@ -129,7 +133,7 @@ public class Parser {
     }
 
     private AdditiveOrigin getOriginFromPageE() {
-        String result = getParameterByHtmlClassName("origin");
+        String result = page.selectFirst("div.addprop--origin").text().replace("происхождение", "").replace("Происхождение", "").strip();
         if (result == null) {
             return AdditiveOrigin.not_assigned;
         }
@@ -146,7 +150,8 @@ public class Parser {
     }
 
     private AdditiveDanger getDangerFromPageE() {
-        String rawTexst = getParameterByHtmlClassName("danger");
+        String rawTexst = page.selectFirst("div.addprop--danger").text().replace("опасность", "").replace("Опасность", "").strip();
+        System.out.println("DANGER: " + rawTexst);
         if (rawTexst == null) {
             return AdditiveDanger.not_assigned;
         }
