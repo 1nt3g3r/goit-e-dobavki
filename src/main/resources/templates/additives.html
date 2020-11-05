@@ -109,6 +109,10 @@
                             <div class="card-header bg-warning"
                                  th:utext="'<b>' + ${additive.eCod} + ' - ' + ${additive.name} + '</b>'"></div>
                         </div>
+                        
+                        <div th:if="${additive.danger.name() == 'not_assigned'}">
+                            <div class="card-header" th:utext="'<b>' + ${additive.eCod} + ' - ' + ${additive.name} + '</b>'"></div>
+                        </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item pl-0 pr-0">

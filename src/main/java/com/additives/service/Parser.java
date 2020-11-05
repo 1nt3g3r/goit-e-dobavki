@@ -88,10 +88,11 @@ public class Parser {
             if (additive.getDanger() == AdditiveDanger.not_assigned && additive.getOrigin() == AdditiveOrigin.not_assigned && additive.getCategory() == AdditiveCategory.not_assigned) {
                 continue;
             }
+            
+            additiveService.saveAdditive(additive);
+            
             additives.add(additive);
         }
-
-        additiveService.saveAll(additives);
 
         return additives;
     }
