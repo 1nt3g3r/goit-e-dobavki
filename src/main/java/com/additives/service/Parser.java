@@ -97,7 +97,12 @@ public class Parser {
     }
 
     private String getNameFromPageE() {
-        String nameRaw = page.selectFirst(".page-title").text();
+        String nameRaw = null;
+        try {
+            nameRaw = page.selectFirst(".page-title").text();
+        } catch (Exception ex) {
+
+        }
         return nameRaw.substring(7);
     }
 
@@ -119,7 +124,13 @@ public class Parser {
     }
 
     private AdditiveCategory getCategoryFromPageE() {
-        String result = page.selectFirst("div.addprop--category").text();
+        String result = null;
+        try {
+            result = page.selectFirst("div.addprop--category").text();
+        } catch (Exception ex) {
+
+        }
+        
         if (result == null) {
             return AdditiveCategory.not_assigned;
         }
@@ -133,7 +144,12 @@ public class Parser {
     }
 
     private AdditiveOrigin getOriginFromPageE() {
-        String result = page.selectFirst("div.addprop--origin").text().replace("происхождение", "").replace("Происхождение", "").strip();
+        String result = null;
+        try {
+            result = page.selectFirst("div.addprop--origin").text().replace("происхождение", "").replace("Происхождение", "").strip();
+        } catch (Exception ex) {
+
+        }
         if (result == null) {
             return AdditiveOrigin.not_assigned;
         }
@@ -150,12 +166,17 @@ public class Parser {
     }
 
     private AdditiveDanger getDangerFromPageE() {
-        String rawTexst = page.selectFirst("div.addprop--danger").text().replace("опасность", "").replace("Опасность", "").strip();
-        System.out.println("DANGER: " + rawTexst);
-        if (rawTexst == null) {
+        String rawText = null;
+        try {
+            rawText = page.selectFirst("div.addprop--danger").text().replace("опасность", "").replace("Опасность", "").strip();
+        } catch (Exception ex) {
+            
+        }
+        
+        if (rawText == null) {
             return AdditiveDanger.not_assigned;
         }
-        return AdditiveDanger.fromDescription(rawTexst);
+        return AdditiveDanger.fromDescription(rawText);
     }
 
 
